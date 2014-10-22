@@ -1,0 +1,8 @@
+#!/bin/bash
+
+datestamp=$(date +%Y%m%d)
+olddate=$(date -d '7 day ago' +%Y%m%d)
+basedir="$MARILARI_DIR"
+ 
+echo "Tar/zipping database dump....please wait."
+tar -cvzf ~/marilari_$datestamp.tgz ~/www/marilari.ru/*   
