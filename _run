@@ -1,0 +1,22 @@
+#!/bin/bash
+
+datestamp=$(date +%Y%m%d)
+olddate=$(date -d '7 day ago' +%Y%m%d)
+basedir="$MARILARI_DIR"
+ 
+echo $MARILARI_DIR
+
+# MARILARI_* look to /etc/profile.d/marilari.sh
+
+
+ssh "$MARILARI_SERVER_USER"@"$MARILARI_SERVER" "mysqldump -u $MARILARI_MYSQL_NAME -p$MARILARI_MYSQL_PASS $MARILARI_MYSQL_NAME > ~/www/marilari.ru/$MARILARI_MYSQL_NAME.out"
+
+ssh "$MARILARI_SERVER_USER"@"$MARILARI_SERVER" 'bash -s' < /work/backupremote/bs
+
+scp -r "$MARILARI_SERVER_USER"@"$MARILARI_SERVER":~/marilari_$datestamp.tgz "$BACKUP/marilari"
+
+echo $datestamp
+
+ssh "$MARILARI_SERVER_USER"@"$MARILARI_SERVER" "rm ~/marilari_$datestamp.tgz"
+
+# !!! Update /etc/crom.daily/_run_marilari
